@@ -1,0 +1,44 @@
+╔══════════════════════════════════════════════════════════╗
+║         SCHOOL MANAGEMENT SYSTEM — ЗАПУСК               ║
+╚══════════════════════════════════════════════════════════╝
+
+ТРЕБОВАНИЕ: Только Java 17+
+Скачать: https://adoptium.net (нажми "Latest LTS Release")
+Проверить: java -version
+
+──────────────────────────────────────────────────────────
+СПОСОБ 1: Двойной клик (самый простой)
+──────────────────────────────────────────────────────────
+1. Открой папку проекта
+2. Дважды кликни на файл "ЗАПУСК.bat"
+3. Дождись строки "Started SchoolManagementApplication"
+4. Открой браузер: http://localhost:8080/h2-console
+
+──────────────────────────────────────────────────────────
+СПОСОБ 2: PowerShell / CMD
+──────────────────────────────────────────────────────────
+mvnw.cmd spring-boot:run
+
+──────────────────────────────────────────────────────────
+УЧЁТНЫЕ ДАННЫЕ (создаются автоматически)
+──────────────────────────────────────────────────────────
+ADMIN:   admin / admin123
+MANAGER: manager1 / manager123
+
+──────────────────────────────────────────────────────────
+API ENDPOINTS
+──────────────────────────────────────────────────────────
+POST   /api/auth/login                    — войти
+POST   /api/admin/users                   — создать пользователя
+GET    /api/admin/users?role=ROLE_USER    — список студентов
+POST   /api/admin/classes                 — создать класс
+PATCH  /api/admin/classes/{id}/manager/{mId}  — назначить менеджера
+POST   /api/admin/classes/{id}/students/{sId} — добавить студента
+POST   /api/manager/attendances           — отметить посещаемость
+GET    /api/manager/attendances?status=ABSENT — фильтр
+GET    /api/student/me                    — профиль студента
+GET    /api/student/attendances           — своя посещаемость
+
+H2 Console: http://localhost:8080/h2-console
+JDBC URL:   jdbc:h2:mem:schooldb
+Username:   sa   |   Password: (пусто)
