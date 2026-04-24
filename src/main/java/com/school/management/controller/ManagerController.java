@@ -6,10 +6,15 @@ import com.school.management.dto.attendance.AttendanceResponse;
 import com.school.management.dto.attendance.MarkAttendanceRequest;
 import com.school.management.dto.attendance.UpdateAttendanceRequest;
 import com.school.management.dto.schoolclass.ClassResponse;
+import com.school.management.dto.schoolclass.CreateClassRequest;
+import com.school.management.dto.user.UserResponse;
+import com.school.management.entity.Role;
 import com.school.management.entity.User;
 import com.school.management.service.AttendanceService;
 import com.school.management.service.SchoolClassService;
+import com.school.management.service.UserService;
 import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -23,9 +28,10 @@ import java.util.List;
 public class ManagerController {
     private final AttendanceService attendanceService;
     private final SchoolClassService classService;
+    private final UserService userService;
 
-    public ManagerController(AttendanceService attendanceService, SchoolClassService classService) {
-        this.attendanceService = attendanceService; this.classService = classService;
+    public ManagerController(AttendanceService attendanceService, SchoolClassService classService, UserService userService) {
+        this.attendanceService = attendanceService; this.classService = classService; this.userService = userService;
     }
 
     @GetMapping("/classes")
@@ -43,6 +49,32 @@ public class ManagerController {
         return ResponseEntity.ok(ApiResponse.ok(classService.getClassById(classId)));
     }
 
+    @PostMapping("/classes")
+    public ResponseEntity<ApiResponse<ClassResponse>> createClass(
+            @Valid @RequestBody CreateClassRequest request, @AuthenticationPrincipal User currentUser) {
+        request.setManagerId(currentUser.getId());
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(ApiResponse.ok("Class created", classService.createClass(request)));
+    }
+
+    @PostMapping("/classes/{classId}/students/{studentId}")
+    public ResponseEntity<ApiResponse<ClassResponse>> enrollStudent(
+            @PathVariable Long classId, @PathVariable Long studentId) {
+        return ResponseEntity.ok(ApiResponse.ok("Student enrolled", classService.enrollStudent(classId, studentId)));
+    }
+
+    @DeleteMapping("/classes/{classId}/students/{studentId}")
+    public ResponseEntity<ApiResponse<ClassResponse>> removeStudent(
+            @PathVariable Long classId, @PathVariable Long studentId) {
+        return ResponseEntity.ok(ApiResponse.ok("Student removed", classService.removeStudent(classId, studentId)));
+    }
+
+    @GetMapping("/students")
+    public ResponseEntity<ApiResponse<List<UserResponse>>> getStudents() {
+        return ResponseEntity.ok(ApiResponse.ok(userService.getUsersByRole(Role.ROLE_USER)));
+    }
+
+    // ── Attendance ─────────────────────────────────────────────────────────
     @PostMapping("/attendances")
     public ResponseEntity<ApiResponse<AttendanceResponse>> markAttendance(
             @Valid @RequestBody MarkAttendanceRequest request, @AuthenticationPrincipal User currentUser) {
