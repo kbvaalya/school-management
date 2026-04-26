@@ -1,7 +1,7 @@
 # 🎓 School Management System
 
-A full-stack web application for managing school operations — including class management, student enrollment, and attendance tracking — built with **Spring Boot** on the backend and **React + Vite** on the frontend.
-developed by Adelia Kabylbaeva Sca-24A
+A full-stack web application for managing school operations — including class management, student enrollment, and attendance tracking — built with **Spring Boot** on the backend and **React + Vite** on the frontend. </br>
+Developed by Adelia Kabylbaeva Sca-24A
 
 ---
 
