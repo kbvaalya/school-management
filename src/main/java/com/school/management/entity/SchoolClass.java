@@ -17,8 +17,6 @@ public class SchoolClass {
     @Column(length = 500)
     private String description;
 
-    @Column(nullable = false)
-    private String subject;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "manager_id")
@@ -34,17 +32,16 @@ public class SchoolClass {
 
     public static Builder builder() { return new Builder(); }
     public static class Builder {
-        private Long id; private String name, description, subject;
+        private Long id; private String name, description;
         private User manager; private Set<User> students = new HashSet<>();
         public Builder id(Long v)          { this.id = v; return this; }
         public Builder name(String v)      { this.name = v; return this; }
         public Builder description(String v){ this.description = v; return this; }
-        public Builder subject(String v)   { this.subject = v; return this; }
         public Builder manager(User v)     { this.manager = v; return this; }
         public SchoolClass build() {
             SchoolClass sc = new SchoolClass();
             sc.id = id; sc.name = name; sc.description = description;
-            sc.subject = subject; sc.manager = manager; sc.students = students;
+            sc.manager = manager; sc.students = students;
             return sc;
         }
     }
@@ -55,8 +52,6 @@ public class SchoolClass {
     public void setName(String name) { this.name = name; }
     public String getDescription() { return description; }
     public void setDescription(String description) { this.description = description; }
-    public String getSubject() { return subject; }
-    public void setSubject(String subject) { this.subject = subject; }
     public User getManager() { return manager; }
     public void setManager(User manager) { this.manager = manager; }
     public Set<User> getStudents() { return students; }

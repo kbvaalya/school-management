@@ -31,7 +31,7 @@ public class SchoolClassService {
     @Transactional
     public ClassResponse createClass(CreateClassRequest request) {
         SchoolClass sc = SchoolClass.builder().name(request.getName())
-                .description(request.getDescription()).subject(request.getSubject()).build();
+                .description(request.getDescription()).build();
         if (request.getManagerId() != null) {
             User m = userService.findById(request.getManagerId());
             if (m.getRole() != Role.ROLE_MANAGER) throw new BadRequestException("User is not a MANAGER");
@@ -73,7 +73,7 @@ public class SchoolClassService {
     @Transactional
     public ClassResponse updateClass(Long classId, CreateClassRequest request) {
         SchoolClass sc = findById(classId);
-        sc.setName(request.getName()); sc.setDescription(request.getDescription()); sc.setSubject(request.getSubject());
+        sc.setName(request.getName()); sc.setDescription(request.getDescription());
         if (request.getManagerId() != null) {
             User m = userService.findById(request.getManagerId());
             if (m.getRole() != Role.ROLE_MANAGER) throw new BadRequestException("User is not a MANAGER");
@@ -123,7 +123,7 @@ public class SchoolClassService {
                 .map(userService::toResponse).collect(Collectors.toSet());
         ClassResponse r = new ClassResponse();
         r.setId(sc.getId()); r.setName(sc.getName()); r.setDescription(sc.getDescription());
-        r.setSubject(sc.getSubject()); r.setStudentCount(students.size()); r.setStudents(students);
+        r.setStudentCount(students.size()); r.setStudents(students);
         if (sc.getManager() != null) r.setManager(userService.toResponse(sc.getManager()));
         return r;
     }

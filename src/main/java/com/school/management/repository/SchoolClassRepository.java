@@ -19,11 +19,10 @@ public interface SchoolClassRepository extends JpaRepository<SchoolClass, Long> 
     @Query("SELECT sc FROM SchoolClass sc JOIN sc.students s WHERE s.id = :studentId")
     List<SchoolClass> findByStudentId(@Param("studentId") Long studentId);
 
-    /** Search by name or subject (case-insensitive) */
+    /** Search by name (case-insensitive) */
     @Query("""
         SELECT sc FROM SchoolClass sc
         WHERE LOWER(sc.name) LIKE LOWER(CONCAT('%', :query, '%'))
-           OR LOWER(sc.subject) LIKE LOWER(CONCAT('%', :query, '%'))
     """)
     List<SchoolClass> searchByNameOrSubject(@Param("query") String query);
 
@@ -31,8 +30,7 @@ public interface SchoolClassRepository extends JpaRepository<SchoolClass, Long> 
     @Query("""
         SELECT sc FROM SchoolClass sc
         WHERE sc.manager.id = :managerId
-          AND (LOWER(sc.name) LIKE LOWER(CONCAT('%', :query, '%'))
-            OR LOWER(sc.subject) LIKE LOWER(CONCAT('%', :query, '%')))
+          AND LOWER(sc.name) LIKE LOWER(CONCAT('%', :query, '%'))
     """)
     List<SchoolClass> searchByManagerAndQuery(@Param("managerId") Long managerId, @Param("query") String query);
 }
